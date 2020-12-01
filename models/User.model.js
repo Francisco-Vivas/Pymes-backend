@@ -51,8 +51,13 @@ const userSchema = new Schema(
       type: [Schema.Types.ObjectId],
       default: [],
     },
-    location: String,
-    address: String,
+    location: { type: String, default: "" },
+    address: { type: String, default: "" },
+    image: {
+      type: String,
+      default:
+        "ronaldmottram.co.nz/wp-content/uploads/2019/01/default-user-icon-8.jpg",
+    },
   },
   {
     timestamps: true,
