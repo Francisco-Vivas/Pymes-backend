@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const orderSchema = new Schema(
   {
-    order: String,
+    orderNum: String,
     date: String,
     customer: String,
     total: String,
@@ -12,7 +12,7 @@ const orderSchema = new Schema(
     },
     fulfillment: {
         type: String,
-        enum: ['PENDING', 'FULFILLED']
+        enum: ['PENDING', 'FULFILLED', 'CANCELLED']
     },
     items: Number,
     extra: String
