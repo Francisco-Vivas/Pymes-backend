@@ -39,6 +39,10 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    prefix: {
+      type: String,
+      default: "+57",
+    },
     clienteID: {
       type: [Schema.Types.ObjectId],
       default: [],
