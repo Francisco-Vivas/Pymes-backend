@@ -13,10 +13,6 @@ const { isAuth } = require("../middlewares/isAuth");
 router.post("/signup", signup);
 router.get("/logout", logout);
 router.post("/login", login);
-// passport.authenticate("local"), (req, res, next) => {
-//   const { user } = req;
-// res.status(200).json({ user });
-// });
 router.get("/current-user", currentUser);
 router.get("/google", googleInit);
 router.get("/google/callback", googleCb);
