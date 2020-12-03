@@ -40,6 +40,10 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    prefix: {
+      type: String,
+      default: "+57",
+    },
     clienteID: {
       type: [Schema.Types.ObjectId],
       default: [],
@@ -56,8 +60,7 @@ const userSchema = new Schema(
     address: { type: String, default: "" },
     image: {
       type: String,
-      default:
-        "ronaldmottram.co.nz/wp-content/uploads/2019/01/default-user-icon-8.jpg",
+      default: "",
     },
   },
   {
