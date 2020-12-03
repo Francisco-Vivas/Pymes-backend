@@ -2,6 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const orderSchema = new Schema(
   {
+    userID: Schema.Types.ObjectId,
     orderNum: String,
     date: String,
     customer: String,

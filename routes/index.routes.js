@@ -17,9 +17,9 @@ router.get('/', (req, res, next) => {
 
 router.get('/orders', isAuth, getOrders)
 // router.get('/orders/:orderId', isAuth, getOrderDetails)
-router.post('/orders', isAuth, createOrder)
+router.post('/orders/create-order', isAuth, createOrder)
 router.put('/orders/:orderId', isAuth, updateOrder)
-router.delete('/orders/:orderId', isAuth, deleteOrder)
+// router.delete('/orders/:orderId', isAuth, deleteOrder)
 
 
 

@@ -3,9 +3,9 @@ const User = require('../models/User.model')
 
 exports.getOrders = async (req, res) => {
     const { user: { id } } = req
-    const { orders } = await User.findById(id).populate('orders')
-
-    res.status(200).json(orders)
+    const user = await User.findById(id).populate('ordersID')
+    const { ordersID } = user
+    res.status(200).json(ordersID)
 }
 
 exports.createOrder = async (req, res) => {
@@ -18,10 +18,10 @@ exports.createOrder = async (req, res) => {
         items,
         extra
     } = req.body
-
-    const { user: { id, facturaID } } = req
+    const { user: { id, ordersID } } = req
     const newOrder = await Order.create({
-        orderNum: facturaID.length + 1,
+        userID: id,
+        orderNum: ordersID.length + 1,
         date,
         customer,
         total,
@@ -30,16 +30,13 @@ exports.createOrder = async (req, res) => {
         items,
         extra
     })
-
-    await User.findByIdAndUpdate(is, { $push: { facturaID: newOrder._id } })
-
+    await User.findByIdAndUpdate(id, { $push: { ordersID: newOrder._id } })
     res.status(201).json(newOrder)
 }
 
 exports.updateOrder = async (req, res) => {
-    const { orderID } = req.params
+    const { orderId } = req.params
     const {
-        orderNum,
         date,
         customer,
         total,
@@ -48,9 +45,8 @@ exports.updateOrder = async (req, res) => {
         items,
         extra        
     } = req.body
-
+    console.log(orderId)
     const updatedOrder = await Order.findByIdAndUpdate(orderId, {
-        orderNum,
         date,
         customer,
         total,
@@ -63,9 +59,4 @@ exports.updateOrder = async (req, res) => {
         res.status(200).json(updatedOrder)
 }
 
-exports.deleteOrder = async (req, res) => {
-    const { orderId } = req.params
-    await Order.findByIdAndDelete(orderId)
-    res.status(200).json({ message: 'Order deleted'})
-}
 // exports.getOrderDetails
