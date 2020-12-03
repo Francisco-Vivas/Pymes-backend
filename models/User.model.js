@@ -59,8 +59,7 @@ const userSchema = new Schema(
     address: { type: String, default: "" },
     image: {
       type: String,
-      default:
-        "ronaldmottram.co.nz/wp-content/uploads/2019/01/default-user-icon-8.jpg",
+      default: "",
     },
   },
   {
