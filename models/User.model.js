@@ -26,6 +26,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
       default: "",
+      unique: true,
     },
     password: {
       type: String,
@@ -38,6 +39,10 @@ const userSchema = new Schema(
     cellphone: {
       type: String,
       default: "",
+    },
+    prefix: {
+      type: String,
+      default: "+57",
     },
     clienteID: {
       type: [Schema.Types.ObjectId],
@@ -55,8 +60,7 @@ const userSchema = new Schema(
     address: { type: String, default: "" },
     image: {
       type: String,
-      default:
-        "ronaldmottram.co.nz/wp-content/uploads/2019/01/default-user-icon-8.jpg",
+      default: "",
     },
   },
   {
