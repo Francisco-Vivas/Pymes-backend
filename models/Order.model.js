@@ -1,7 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const orderSchema = new Schema(
-  {
+const orderSchema = new Schema({
     userID: Schema.Types.ObjectId,
     orderNum: String,
     date: String,
@@ -15,12 +14,15 @@ const orderSchema = new Schema(
         type: String,
         enum: ['PENDING', 'FULFILLED', 'CANCELLED']
     },
-    items: Number,
+    items: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Product'
+    }],
     extra: String
-  },
-  {
+},
+{
     timestamps: true,
-  }
+}
 );
 
 module.exports = model('Order', orderSchema);

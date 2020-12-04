@@ -1,4 +1,4 @@
-const Order = require('../models/Order')
+const Order = require('../models/Order.model')
 const User = require('../models/User.model')
 
 exports.getOrders = async (req, res) => {
@@ -60,7 +60,6 @@ exports.updateOrder = async (req, res) => {
 
 exports.getOrderDetails = async (req, res) => {
     const { id } = req.params
-    console.log(id)
     const order = await Order.findById(id)
 
     res.status(200).json(order)
