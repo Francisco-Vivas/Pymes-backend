@@ -5,62 +5,74 @@ const userSchema = new Schema(
   {
     companyName: {
       type: String,
-      default: ""
+      default: "",
     },
     username: {
       type: String,
       required: true,
-      default: ""
+      default: "",
     },
     userlastname: {
       type: String,
       required: true,
-      default: ""
+      default: "",
     },
     email: {
       type: String,
       required: true,
       default: "",
-      unique: true
+      unique: true,
     },
     password: {
       type: String,
-      default: ""
+      default: "",
     },
     googleID: {
       type: String,
-      default: ""
+      default: "",
     },
     cellphone: {
       type: String,
-      default: ""
+      default: "",
     },
     prefix: {
       type: String,
-      default: "+57"
+      default: "+57",
     },
-    clienteID: {
-      type: [Schema.Types.ObjectId],
-      default: []
-    },
-    proveedorID: {
-      type: [Schema.Types.ObjectId],
-      default: []
-    },
-    facturaID: {
-      type: [Schema.Types.ObjectId],
-      default: []
-    },
+    clientsID: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Client",
+      },
+    ],
+    supplierID: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Supplier",
+      },
+    ],
+    ordersID: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
+    productsID: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
     location: { type: String, default: "" },
     address: { type: String, default: "" },
     image: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   {
     timestamps: true,
-    versionKey: false
+    versionKey: false,
   }
 );
 
