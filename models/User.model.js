@@ -3,69 +3,64 @@ const PLM = require("passport-local-mongoose");
 
 const userSchema = new Schema(
   {
-    userType: {
-      type: String,
-      enum: ["USER", "CLIENT", "SUPPLIER"],
-      default: "USER",
-    },
     companyName: {
       type: String,
-      default: "",
+      default: ""
     },
     username: {
       type: String,
       required: true,
-      default: "",
+      default: ""
     },
     userlastname: {
       type: String,
       required: true,
-      default: "",
+      default: ""
     },
     email: {
       type: String,
       required: true,
       default: "",
-      unique: true,
+      unique: true
     },
     password: {
       type: String,
-      default: "",
+      default: ""
     },
     googleID: {
       type: String,
-      default: "",
+      default: ""
     },
     cellphone: {
       type: String,
-      default: "",
+      default: ""
     },
     prefix: {
       type: String,
-      default: "+57",
+      default: "+57"
     },
     clienteID: {
       type: [Schema.Types.ObjectId],
-      default: [],
+      default: []
     },
     proveedorID: {
       type: [Schema.Types.ObjectId],
-      default: [],
+      default: []
     },
     facturaID: {
       type: [Schema.Types.ObjectId],
-      default: [],
+      default: []
     },
     location: { type: String, default: "" },
     address: { type: String, default: "" },
     image: {
       type: String,
-      default: "",
-    },
+      default: ""
+    }
   },
   {
     timestamps: true,
-    versionKey: false,
+    versionKey: false
   }
 );
 

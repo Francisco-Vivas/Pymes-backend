@@ -10,11 +10,15 @@ const cors = require("cors");
 const session = require("express-session");
 
 mongoose
-  .connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then((x) =>
+  .connect(process.env.DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+  })
+  .then(x =>
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   )
-  .catch((err) => console.error("Error connecting to mongo", err));
+  .catch(err => console.error("Error connecting to mongo", err));
 
 const app_name = require("./package.json").name;
 const debug = require("debug")(
@@ -26,7 +30,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: [process.env.FRONTENDPOINT],
+    origin: [process.env.FRONTENDPOINT]
   })
 );
 
@@ -35,7 +39,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     secret: process.env.SECRET,
-    cookie: { maxAge: 1000 * 60 * 60 },
+    cookie: { maxAge: 1000 * 60 * 60 }
   })
 );
 
@@ -48,9 +52,8 @@ app.use(cookieParser());
 app.use(logger("dev"));
 
 const index = require("./routes/index.routes");
-app.use("/", index);
+app.use("/api", index);
 app.use("/auth", require("./routes/auth.routes"));
-app.use("/api/user", require("./routes/User.routes"));
 
 // Uncomment this line for production
 // app.get('/*', (req, res) => res.sendFile(__dirname + '/public/index.html'));
