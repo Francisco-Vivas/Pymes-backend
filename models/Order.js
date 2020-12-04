@@ -9,7 +9,7 @@ const orderSchema = new Schema(
     total: String,
     payment: {
         type: String,
-        enum: ['PENDING', 'PAID']
+        enum: ['UNPAID', 'PAID']
     },
     fulfillment: {
         type: String,
