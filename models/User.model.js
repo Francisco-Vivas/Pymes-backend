@@ -44,18 +44,17 @@ const userSchema = new Schema(
       type: String,
       default: "+57",
     },
-    clienteID: {
-      type: [Schema.Types.ObjectId],
-      default: [],
-    },
-    proveedorID: {
-      type: [Schema.Types.ObjectId],
-      default: [],
-    },
-    facturaID: {
-      type: [Schema.Types.ObjectId],
-      default: [],
-    },
+    clienteID: [{
+      type: Schema.Types.ObjectId,
+    }],
+    proveedorID: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Supplier'
+    }],
+    ordersID:  [{
+      type: Schema.Types.ObjectId,
+      ref: 'Order'
+    }],
     location: { type: String, default: "" },
     address: { type: String, default: "" },
     image: {
