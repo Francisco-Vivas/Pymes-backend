@@ -86,31 +86,17 @@ exports.deleteProduct = async (req, res) => {
 
 exports.searchProduct = async (req, res) => {
   const { searchString, hasQuantity } = req.body;
+  const regSearch = diacriticSensitiveRegexV2(searchString);
 
-  const products = await ProductModel.find({
-    $and: [
-      {
-        userID: req.user._id,
-        name: {
-          $regex: diacriticSensitiveRegexV2(searchString),
-          $options: "i",
-        },
-        quantity: {
-          $gte: hasQuantity ? 1 : 0,
-        },
-      },
-    ],
-  });
+  const userProducts = await UserModel.findById(req.user._id).populate(
+    "productsID"
+  );
 
-  // const userProducts = await UserModel.findById(req.user._id)
-  //   .populate("productsID")
-  //   ["productsID"].filter((product) =>
-  //     diacriticSensitiveRegexV2(searchString).test(product.name) && hasQuantity
-  //       ? product.quantity > 0
-  //       : true
-  //   );
-
-  // console.log("userProducts", userProducts);
+  const products = userProducts.productsID.filter(
+    (product) =>
+      regSearch.test(product.name) &&
+      (hasQuantity ? product.quantity > 0 : true)
+  );
 
   res.status(200).json(products);
 };
