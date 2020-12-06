@@ -1,4 +1,3 @@
-const Order = require('../models/Order.model')
 const User = require('../models/User.model')
 const Supplier = require('../models/Supplier.model')
 
