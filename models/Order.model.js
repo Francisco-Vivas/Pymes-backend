@@ -10,27 +10,29 @@ const orderSchema = new Schema(
       type: String,
       default: "0",
     },
+    date: String,
+    customer: String,
+    total: {
+      type: Number,
+      default: 0,
+    },
     payment: {
       type: String,
-      enum: ["PENDING", "PAID"],
-      default: "PENDING",
+      enum: ["UNPAID", "PAID"],
+      default: "UNPAID",
     },
     fulfillment: {
       type: String,
       enum: ["PENDING", "FULFILLED", "CANCELLED"],
       default: "PENDING",
     },
-    items: {
-      type: Number,
-      default: 0,
-    },
-    total: {
-      type: Number,
-      default: 0,
-    },
-    date: String,
+    items: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
     extra: String,
-    customer: String,
   },
   {
     timestamps: true,

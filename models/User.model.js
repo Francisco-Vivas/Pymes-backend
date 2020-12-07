@@ -45,7 +45,7 @@ const userSchema = new Schema(
         ref: "Client",
       },
     ],
-    supplierID: [
+    suppliersID: [
       {
         type: Schema.Types.ObjectId,
         ref: "Supplier",

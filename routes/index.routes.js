@@ -14,8 +14,15 @@ const {
   getOrders,
   createOrder,
   updateOrder,
-  deleteOrder,
-} = require("../controllers/orders");
+  getOrderDetails,
+} = require("../controllers/orders.controller");
+const {
+  getSuppliers,
+  createSupplier,
+  getSupplierDetails,
+  deleteSupplier,
+  updateSupplier,
+} = require("../controllers/supplier.controller");
 
 router.get("/", (req, res, next) => {
   res.status(200).json({ msg: "Working" });
@@ -34,8 +41,15 @@ router.delete("/products/:productID", isAuth, deleteProduct);
 
 /* ############################## ORDERS ROUTES ##############################*/
 router.get("/orders", isAuth, getOrders);
-// router.get("/orders/:orderId", isAuth, getOrderDetails);
+router.get("/orders/:id", isAuth, getOrderDetails);
 router.post("/orders/create-order", isAuth, createOrder);
-router.put("/orders/:orderId", isAuth, updateOrder);
+router.put("/orders/:id", isAuth, updateOrder);
+
+/* ############################## SUPLIER ROUTES ##############################*/
+router.get("/suppliers", isAuth, getSuppliers);
+router.get("/suppliers/:id", isAuth, getSupplierDetails);
+router.post("/suppliers/create-supplier", isAuth, createSupplier);
+router.put("/suppliers/:id", isAuth, updateSupplier);
+router.delete("/suppliers/:id", isAuth, deleteSupplier);
 
 module.exports = router;
