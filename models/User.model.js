@@ -3,11 +3,6 @@ const PLM = require("passport-local-mongoose");
 
 const userSchema = new Schema(
   {
-    userType: {
-      type: String,
-      enum: ["USER", "CLIENT", "SUPPLIER"],
-      default: "USER",
-    },
     companyName: {
       type: String,
       default: "",
@@ -44,17 +39,30 @@ const userSchema = new Schema(
       type: String,
       default: "+57",
     },
-    clienteID: [{
-      type: Schema.Types.ObjectId,
-    }],
-    suppliersID: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Supplier'
-    }],
-    ordersID:  [{
-      type: Schema.Types.ObjectId,
-      ref: 'Order'
-    }],
+    clientsID: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Client",
+      },
+    ],
+    suppliersID: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Supplier",
+      },
+    ],
+    ordersID: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
+    productsID: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
     location: { type: String, default: "" },
     address: { type: String, default: "" },
     image: {
