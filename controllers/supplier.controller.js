@@ -3,8 +3,9 @@ const Supplier = require('../models/Supplier.model')
 
 
 exports.getSuppliers = async (req, res) => {
-    const { user: { id } } = req
-    const user = await User.findById(id).populate('suppliersID')
+    const { user: { _id } } = req
+    console.log(_id)
+    const user = await User.findById(_id).populate('suppliersID')
     const { suppliersID } = user
     res.status(200).json(suppliersID)
 }
@@ -28,7 +29,7 @@ exports.createSupplier = async (req, res) => {
         lastOrder
         // products???
     })
-    await User.findByIdAndUpdate(id, { $push: { suppliers: newSupplier._id } })
+    await User.findByIdAndUpdate(id, { $push: { suppliersID: newSupplier._id } })
     res.status(201).json(newSupplier)
 }
 
