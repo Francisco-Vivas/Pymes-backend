@@ -94,7 +94,7 @@ exports.searchProduct = async (req, res) => {
 
   const products = userProducts.productsID.filter(
     (product) =>
-      regSearch.test(product.name) &&
+      regSearch.test(product.name.toLowerCase()) &&
       (hasQuantity ? product.quantity > 0 : true)
   );
 

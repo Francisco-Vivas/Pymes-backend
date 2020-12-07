@@ -44,7 +44,7 @@ router.get("/orders/:id", isAuth, catchErrs(getOrderDetails));
 router.post("/orders/create-order", isAuth, catchErrs(createOrder));
 router.put("/orders/:id", isAuth, catchErrs(updateOrder));
 
-/* ############################## SUPLIER ROUTES ##############################*/
+/* ############################## SUPPLIER ROUTES ##############################*/
 router.get("/suppliers", isAuth, catchErrs(getSuppliers));
 router.get("/suppliers/:id", isAuth, catchErrs(getSupplierDetails));
 router.post("/suppliers/create-supplier", isAuth, catchErrs(createSupplier));

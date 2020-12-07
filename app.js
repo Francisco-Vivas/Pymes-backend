@@ -10,11 +10,16 @@ const cors = require("cors");
 const session = require("express-session");
 
 mongoose
-  .connect(process.env.DB || "mongodb://localhost/backend", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  })
+  .connect(
+    process.env.ENV === "development"
+      ? "mongodb://localhost/backend"
+      : process.env.DB,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    }
+  )
   .then((x) =>
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   )
