@@ -1,6 +1,5 @@
 const router = require("express").Router();
-const UserModel = require("../models/User.model");
-const { isAuth } = require("../middlewares/isAuth");
+const { isAuth, catchErrs } = require("../middlewares/isAuth");
 const { editUser } = require("../controllers/User.controller");
 const {
   createProduct,
@@ -29,27 +28,27 @@ router.get("/", (req, res, next) => {
 });
 
 /* ############################### USER ROUTES ###############################*/
-router.put("/user/edit", isAuth, editUser);
+router.put("/user/edit", isAuth, catchErrs(editUser));
 
 /* ############################# PRODUCTS ROUTES #############################*/
-router.get("/products/", isAuth, getAllProduct);
-router.get("/products/:productID", isAuth, getAProduct);
-router.post("/products/search", isAuth, searchProduct);
-router.post("/products/create", isAuth, createProduct);
-router.put("/products/:productID", isAuth, editProduct);
-router.delete("/products/:productID", isAuth, deleteProduct);
+router.get("/products/", isAuth, catchErrs(getAllProduct));
+router.get("/products/:productID", isAuth, catchErrs(getAProduct));
+router.post("/products/search", isAuth, catchErrs(searchProduct));
+router.post("/products/create", isAuth, catchErrs(createProduct));
+router.put("/products/:productID", isAuth, catchErrs(editProduct));
+router.delete("/products/:productID", isAuth, catchErrs(deleteProduct));
 
 /* ############################## ORDERS ROUTES ##############################*/
-router.get("/orders", isAuth, getOrders);
-router.get("/orders/:id", isAuth, getOrderDetails);
-router.post("/orders/create-order", isAuth, createOrder);
-router.put("/orders/:id", isAuth, updateOrder);
+router.get("/orders", isAuth, catchErrs(getOrders));
+router.get("/orders/:id", isAuth, catchErrs(getOrderDetails));
+router.post("/orders/create-order", isAuth, catchErrs(createOrder));
+router.put("/orders/:id", isAuth, catchErrs(updateOrder));
 
 /* ############################## SUPLIER ROUTES ##############################*/
-router.get("/suppliers", isAuth, getSuppliers);
-router.get("/suppliers/:id", isAuth, getSupplierDetails);
-router.post("/suppliers/create-supplier", isAuth, createSupplier);
-router.put("/suppliers/:id", isAuth, updateSupplier);
-router.delete("/suppliers/:id", isAuth, deleteSupplier);
+router.get("/suppliers", isAuth, catchErrs(getSuppliers));
+router.get("/suppliers/:id", isAuth, catchErrs(getSupplierDetails));
+router.post("/suppliers/create-supplier", isAuth, catchErrs(createSupplier));
+router.put("/suppliers/:id", isAuth, catchErrs(updateSupplier));
+router.delete("/suppliers/:id", isAuth, catchErrs(deleteSupplier));
 
 module.exports = router;
