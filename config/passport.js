@@ -1,8 +1,11 @@
-const User = require('../models/User');
-const passport = require('passport');
+const UserModel = require("../models/User.model");
+const passport = require("passport");
 
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+require("./serializers");
+passport.use(UserModel.createStrategy());
+require("./googleStrategy");
 
-module.exports = passport;
+module.exports = (app) => {
+  app.use(passport.initialize());
+  app.use(passport.session());
+};
