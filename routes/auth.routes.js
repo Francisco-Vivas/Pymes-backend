@@ -8,7 +8,7 @@ const {
   googleInit,
   googleCb,
 } = require("../controllers/auth.controller");
-const { isAuth } = require("../middlewares/isAuth");
+const { isAuth } = require("../middlewares");
 
 router.post("/signup", signup);
 router.get("/logout", logout);

@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { isAuth, catchErrs } = require("../middlewares/isAuth");
+const { isAuth, catchErrs } = require("../middlewares");
 const { editUser } = require("../controllers/User.controller");
 const {
   createProduct,
