@@ -23,6 +23,13 @@ const {
   deleteSupplier,
   updateSupplier,
 } = require("../controllers/supplier.controller");
+const {
+  getClients,
+  createClient,
+  getClientDetails,
+  deleteClient,
+  updateClient,
+} = require("../controllers/clients.controller");
 
 router.get("/", (req, res, next) => {
   res.status(200).json({ msg: "Working" });
@@ -52,5 +59,13 @@ router.get("/suppliers/:id", isAuth, catchErrs(getSupplierDetails));
 router.post("/suppliers/create-supplier", isAuth, catchErrs(createSupplier));
 router.put("/suppliers/:id", isAuth, catchErrs(updateSupplier));
 router.delete("/suppliers/:id", isAuth, catchErrs(deleteSupplier));
+
+
+/*############################# CLIENTS ROUTES ###############################*/
+router.get("/clients", isAuth, catchErrs(getClients));
+router.get("/clients/:id", isAuth, catchErrs(getClientDetails));
+router.post("/clients/create-client", isAuth, catchErrs(createClient));
+router.put("/clients/:id", isAuth, catchErrs(updateClient));
+router.delete("/clients/:id", isAuth, catchErrs(deleteClient));
 
 module.exports = router;
