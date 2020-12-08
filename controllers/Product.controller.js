@@ -94,9 +94,17 @@ exports.searchProduct = async (req, res) => {
 
   const products = userProducts.productsID.filter(
     (product) =>
-      regSearch.test(product.name) &&
+      regSearch.test(product.name.toLowerCase()) &&
       (hasQuantity ? product.quantity > 0 : true)
   );
 
   res.status(200).json(products);
+};
+
+exports.getProductsAvailable = async (req, res) => {
+  const { productsID } = await UserModel.findById(req.user._id).populate(
+    "productsID"
+  );
+  const productsAvailable = productsID.filter((e) => e.quantity);
+  res.status(200).json(productsAvailable);
 };

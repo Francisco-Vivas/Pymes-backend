@@ -8,6 +8,7 @@ const {
   getAProduct,
   deleteProduct,
   searchProduct,
+  getProductsAvailable,
 } = require("../controllers/Product.controller");
 const {
   getOrders,
@@ -32,6 +33,7 @@ router.put("/user/edit", isAuth, catchErrs(editUser));
 
 /* ############################# PRODUCTS ROUTES #############################*/
 router.get("/products/", isAuth, catchErrs(getAllProduct));
+router.get("/products/available", isAuth, catchErrs(getProductsAvailable));
 router.get("/products/:productID", isAuth, catchErrs(getAProduct));
 router.post("/products/search", isAuth, catchErrs(searchProduct));
 router.post("/products/create", isAuth, catchErrs(createProduct));
@@ -44,7 +46,7 @@ router.get("/orders/:id", isAuth, catchErrs(getOrderDetails));
 router.post("/orders/create-order", isAuth, catchErrs(createOrder));
 router.put("/orders/:id", isAuth, catchErrs(updateOrder));
 
-/* ############################## SUPLIER ROUTES ##############################*/
+/* ############################## SUPPLIER ROUTES ##############################*/
 router.get("/suppliers", isAuth, catchErrs(getSuppliers));
 router.get("/suppliers/:id", isAuth, catchErrs(getSupplierDetails));
 router.post("/suppliers/create-supplier", isAuth, catchErrs(createSupplier));
