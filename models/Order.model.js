@@ -32,6 +32,24 @@ const orderSchema = new Schema(
         ref: "Product",
       },
     ],
+    itemsQuantity: [
+      {
+        type: Number,
+        default: 0,
+      },
+    ],
+    itemsSalePrice: [
+      {
+        type: Number,
+        default: 0,
+      },
+    ],
+    itemsSubtotal: [
+      {
+        type: Number,
+        default: 0,
+      },
+    ],
     extra: String,
   },
   {
