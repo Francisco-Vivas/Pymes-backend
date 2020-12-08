@@ -48,7 +48,7 @@ exports.getAllProduct = async (req, res) => {
 exports.getAProduct = async (req, res) => {
   const { productID } = req.params;
 
-  const product = await ProductModel.findById(productID);
+  const product = await ProductModel.findById(productID).populate("supplierID");
 
   res.status(200).json(product);
 };
@@ -57,7 +57,7 @@ exports.createProduct = async (req, res) => {
   const productValues = getAllProductValues(req);
 
   const newProduct = await ProductModel.create(productValues);
-  console.log("newProduct._id", newProduct._id);
+
   await UserModel.findByIdAndUpdate(req.user._id, {
     $push: { productsID: newProduct._id },
   });
