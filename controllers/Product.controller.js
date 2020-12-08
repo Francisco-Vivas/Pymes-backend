@@ -100,3 +100,11 @@ exports.searchProduct = async (req, res) => {
 
   res.status(200).json(products);
 };
+
+exports.getProductsAvailable = async (req, res) => {
+  const { productsID } = await UserModel.findById(req.user._id).populate(
+    "productsID"
+  );
+  const productsAvailable = productsID.filter((e) => e.quantity);
+  res.status(200).json(productsAvailable);
+};
