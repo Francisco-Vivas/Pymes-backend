@@ -1,4 +1,5 @@
 const ProductModel = require("../models/Product.model");
+const SupplierModel = require("../models/Supplier.model");
 const UserModel = require("../models/User.model");
 
 function diacriticSensitiveRegexV2(string = "") {
@@ -19,7 +20,7 @@ const getAllProductValues = (req) => {
     name,
     quantity,
     salePrice,
-    wholesale,
+    wholesalePrice,
     image,
     threshold,
     sku,
@@ -31,12 +32,20 @@ const getAllProductValues = (req) => {
     name,
     quantity,
     salePrice,
-    wholesale,
+    wholesalePrice,
     image,
     threshold,
     sku,
     ...{ supplierID: supplierID || req.user._id },
   };
+};
+
+const pushProductToSupplier = async (productID, supplierID = null, userID) => {
+  if (supplierID !== userID) {
+    await SupplierModel.findByIdAndUpdate(supplierID, {
+      $push: { products: productID },
+    });
+  }
 };
 
 exports.getAllProduct = async (req, res) => {
@@ -62,6 +71,12 @@ exports.createProduct = async (req, res) => {
     $push: { productsID: newProduct._id },
   });
 
+  await pushProductToSupplier(
+    newProduct._id,
+    productValues.supplierID,
+    req.user._id
+  );
+
   res.status(201).json(newProduct);
 };
 
@@ -73,6 +88,12 @@ exports.editProduct = async (req, res) => {
     productID,
     productValues,
     { new: true }
+  );
+
+  await pushProductToSupplier(
+    productID,
+    productValues.supplierID,
+    req.user._id
   );
 
   res.status(200).json(updatedProduct);

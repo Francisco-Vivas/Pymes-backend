@@ -1,11 +1,15 @@
 const Order = require("../models/Order.model");
+const ProductModel = require("../models/Product.model");
 const User = require("../models/User.model");
 
 exports.getOrders = async (req, res) => {
   const {
     user: { id },
   } = req;
-  const user = await User.findById(id).populate("ordersID");
+  const user = await User.findById(id).populate({
+    path: "ordersID",
+    populate: { path: "clientID" },
+  });
   const { ordersID } = user;
   res.status(200).json(ordersID);
 };
@@ -13,33 +17,48 @@ exports.getOrders = async (req, res) => {
 exports.createOrder = async (req, res) => {
   const {
     date,
-    customer,
+    clientID,
     total,
     payment,
     fulfillment,
-    items,
     extra,
-    itemsQuantity,
-    itemsSalePrice,
-    itemsSubtotal,
+    productsList,
   } = req.body;
+
   const {
     user: { id, ordersID },
   } = req;
+
+  let items = [],
+    itemsQuantity = [],
+    itemsSalePrice = [],
+    itemsSubtotal = [];
+  for (let product of productsList) {
+    const searchProduct = await ProductModel.findById(product._id);
+    items.push(product._id);
+    itemsQuantity.push(product.quantity);
+    itemsSalePrice.push(product.salePrice);
+    itemsSubtotal.push(product.quantity * product.salePrice);
+    await ProductModel.findByIdAndUpdate(product._id, {
+      quantity: searchProduct.quantity - product.quantity,
+    });
+  }
+
   const newOrder = await Order.create({
     userID: id,
     orderNum: ordersID.length + 1,
     date,
-    customer,
+    clientID,
     total,
     payment,
     fulfillment,
-    items,
     extra,
+    items,
     itemsQuantity,
     itemsSalePrice,
     itemsSubtotal,
   });
+
   await User.findByIdAndUpdate(id, { $push: { ordersID: newOrder._id } });
   res.status(201).json(newOrder);
 };
@@ -48,7 +67,7 @@ exports.updateOrder = async (req, res) => {
   const { id } = req.params;
   const {
     date,
-    customer,
+    clientID,
     total,
     payment,
     fulfillment,
@@ -59,7 +78,7 @@ exports.updateOrder = async (req, res) => {
     id,
     {
       date,
-      customer,
+      clientID,
       total,
       payment,
       fulfillment,
@@ -74,7 +93,7 @@ exports.updateOrder = async (req, res) => {
 
 exports.getOrderDetails = async (req, res) => {
   const { id } = req.params;
-  const order = await Order.findById(id).populate("items");
+  const order = await Order.findById(id).populate("items").populate("clientID");
 
   res.status(200).json(order);
 };

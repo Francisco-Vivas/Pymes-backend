@@ -59,7 +59,7 @@ exports.updateSupplier = async (req, res) => {
 
   for (let product of products) {
     await ProductModel.findByIdAndUpdate(product, {
-      supplierID: newSupplier._id,
+      supplierID: updatedSupplier._id,
     });
   }
 
