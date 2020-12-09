@@ -1,4 +1,5 @@
 const Order = require("../models/Order.model");
+const ProductModel = require("../models/Product.model");
 const User = require("../models/User.model");
 
 exports.getOrders = async (req, res) => {
@@ -20,15 +21,29 @@ exports.createOrder = async (req, res) => {
     total,
     payment,
     fulfillment,
-    items,
     extra,
-    itemsQuantity,
-    itemsSalePrice,
-    itemsSubtotal,
+    productsList,
   } = req.body;
+
   const {
     user: { id, ordersID },
   } = req;
+
+  let items = [],
+    itemsQuantity = [],
+    itemsSalePrice = [],
+    itemsSubtotal = [];
+  for (let product of productsList) {
+    const searchProduct = await ProductModel.findById(product._id);
+    items.push(product._id);
+    itemsQuantity.push(product.quantity);
+    itemsSalePrice.push(product.salePrice);
+    itemsSubtotal.push(product.quantity * product.salePrice);
+    await ProductModel.findByIdAndUpdate(product._id, {
+      quantity: searchProduct.quantity - product.quantity,
+    });
+  }
+
   const newOrder = await Order.create({
     userID: id,
     orderNum: ordersID.length + 1,
@@ -37,12 +52,13 @@ exports.createOrder = async (req, res) => {
     total,
     payment,
     fulfillment,
-    items,
     extra,
+    items,
     itemsQuantity,
     itemsSalePrice,
     itemsSubtotal,
   });
+
   await User.findByIdAndUpdate(id, { $push: { ordersID: newOrder._id } });
   res.status(201).json(newOrder);
 };
