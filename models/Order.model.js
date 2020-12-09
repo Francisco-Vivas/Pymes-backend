@@ -11,7 +11,10 @@ const orderSchema = new Schema(
       default: "0",
     },
     date: String,
-    customer: String,
+    clientID: {
+      type: Schema.Types.ObjectId,
+      ref: "Client",
+    },
     total: {
       type: Number,
       default: 0,

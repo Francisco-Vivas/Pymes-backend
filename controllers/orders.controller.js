@@ -5,7 +5,10 @@ exports.getOrders = async (req, res) => {
   const {
     user: { id },
   } = req;
-  const user = await User.findById(id).populate("ordersID");
+  const user = await User.findById(id).populate({
+    path: "ordersID",
+    populate: { path: "clientID" },
+  });
   const { ordersID } = user;
   res.status(200).json(ordersID);
 };
@@ -13,7 +16,7 @@ exports.getOrders = async (req, res) => {
 exports.createOrder = async (req, res) => {
   const {
     date,
-    customer,
+    clientID,
     total,
     payment,
     fulfillment,
@@ -30,7 +33,7 @@ exports.createOrder = async (req, res) => {
     userID: id,
     orderNum: ordersID.length + 1,
     date,
-    customer,
+    clientID,
     total,
     payment,
     fulfillment,
@@ -48,7 +51,7 @@ exports.updateOrder = async (req, res) => {
   const { id } = req.params;
   const {
     date,
-    customer,
+    clientID,
     total,
     payment,
     fulfillment,
@@ -59,7 +62,7 @@ exports.updateOrder = async (req, res) => {
     id,
     {
       date,
-      customer,
+      clientID,
       total,
       payment,
       fulfillment,
@@ -74,7 +77,7 @@ exports.updateOrder = async (req, res) => {
 
 exports.getOrderDetails = async (req, res) => {
   const { id } = req.params;
-  const order = await Order.findById(id).populate("items");
+  const order = await Order.findById(id).populate("items").populate("clientID");
 
   res.status(200).json(order);
 };
