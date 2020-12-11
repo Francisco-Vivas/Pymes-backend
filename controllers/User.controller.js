@@ -31,3 +31,4 @@ exports.editUser = async (req, res) => {
 
   res.status(200).json(user);
 };
+
