@@ -2,6 +2,24 @@ const Order = require("../models/Order.model");
 const ProductModel = require("../models/Product.model");
 const User = require("../models/User.model");
 
+async function productsToItems(productsList) {
+  let items = [],
+    itemsQuantity = [],
+    itemsSalePrice = [],
+    itemsSubtotal = [];
+  for (let product of productsList) {
+    const searchProduct = await ProductModel.findById(product._id);
+    items.push(product._id);
+    itemsQuantity.push(product.quantity);
+    itemsSalePrice.push(product.salePrice);
+    itemsSubtotal.push(product.quantity * product.salePrice);
+    await ProductModel.findByIdAndUpdate(product._id, {
+      quantity: searchProduct.quantity - product.quantity,
+    });
+  }
+  return { items, itemsQuantity, itemsSalePrice, itemsSubtotal };
+}
+
 exports.getOrders = async (req, res) => {
   const {
     user: { id },
@@ -29,20 +47,12 @@ exports.createOrder = async (req, res) => {
     user: { id, ordersID },
   } = req;
 
-  let items = [],
-    itemsQuantity = [],
-    itemsSalePrice = [],
-    itemsSubtotal = [];
-  for (let product of productsList) {
-    const searchProduct = await ProductModel.findById(product._id);
-    items.push(product._id);
-    itemsQuantity.push(product.quantity);
-    itemsSalePrice.push(product.salePrice);
-    itemsSubtotal.push(product.quantity * product.salePrice);
-    await ProductModel.findByIdAndUpdate(product._id, {
-      quantity: searchProduct.quantity - product.quantity,
-    });
-  }
+  const {
+    items,
+    itemsQuantity,
+    itemsSalePrice,
+    itemsSubtotal,
+  } = await productsToItems(productsList);
 
   const newOrder = await Order.create({
     userID: id,
@@ -71,9 +81,17 @@ exports.updateOrder = async (req, res) => {
     total,
     payment,
     fulfillment,
-    items,
     extra,
+    productsList,
   } = req.body;
+
+  const {
+    items,
+    itemsQuantity,
+    itemsSalePrice,
+    itemsSubtotal,
+  } = await productsToItems(productsList);
+
   const updatedOrder = await Order.findByIdAndUpdate(
     id,
     {
@@ -82,8 +100,11 @@ exports.updateOrder = async (req, res) => {
       total,
       payment,
       fulfillment,
-      items,
       extra,
+      items,
+      itemsQuantity,
+      itemsSalePrice,
+      itemsSubtotal,
     },
     { new: true }
   );
