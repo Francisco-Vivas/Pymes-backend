@@ -11,7 +11,10 @@ const orderSchema = new Schema(
       default: "0",
     },
     date: String,
-    customer: String,
+    clientID: {
+      type: Schema.Types.ObjectId,
+      ref: "Client",
+    },
     total: {
       type: Number,
       default: 0,
@@ -30,6 +33,24 @@ const orderSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: "Product",
+      },
+    ],
+    itemsQuantity: [
+      {
+        type: Number,
+        default: 0,
+      },
+    ],
+    itemsSalePrice: [
+      {
+        type: Number,
+        default: 0,
+      },
+    ],
+    itemsSubtotal: [
+      {
+        type: Number,
+        default: 0,
       },
     ],
     extra: String,

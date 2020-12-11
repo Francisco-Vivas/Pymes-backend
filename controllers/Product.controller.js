@@ -1,4 +1,5 @@
 const ProductModel = require("../models/Product.model");
+const SupplierModel = require("../models/Supplier.model");
 const UserModel = require("../models/User.model");
 
 function diacriticSensitiveRegexV2(string = "") {
@@ -19,7 +20,7 @@ const getAllProductValues = (req) => {
     name,
     quantity,
     salePrice,
-    wholesale,
+    wholesalePrice,
     image,
     threshold,
     sku,
@@ -31,12 +32,20 @@ const getAllProductValues = (req) => {
     name,
     quantity,
     salePrice,
-    wholesale,
+    wholesalePrice,
     image,
     threshold,
     sku,
     ...{ supplierID: supplierID || req.user._id },
   };
+};
+
+const pushProductToSupplier = async (productID, supplierID = null, userID) => {
+  if (supplierID !== userID) {
+    await SupplierModel.findByIdAndUpdate(supplierID, {
+      $push: { products: productID },
+    });
+  }
 };
 
 exports.getAllProduct = async (req, res) => {
@@ -48,7 +57,7 @@ exports.getAllProduct = async (req, res) => {
 exports.getAProduct = async (req, res) => {
   const { productID } = req.params;
 
-  const product = await ProductModel.findById(productID);
+  const product = await ProductModel.findById(productID).populate("supplierID");
 
   res.status(200).json(product);
 };
@@ -57,10 +66,16 @@ exports.createProduct = async (req, res) => {
   const productValues = getAllProductValues(req);
 
   const newProduct = await ProductModel.create(productValues);
-  console.log("newProduct._id", newProduct._id);
+
   await UserModel.findByIdAndUpdate(req.user._id, {
     $push: { productsID: newProduct._id },
   });
+
+  await pushProductToSupplier(
+    newProduct._id,
+    productValues.supplierID,
+    req.user._id
+  );
 
   res.status(201).json(newProduct);
 };
@@ -73,6 +88,12 @@ exports.editProduct = async (req, res) => {
     productID,
     productValues,
     { new: true }
+  );
+
+  await pushProductToSupplier(
+    productID,
+    productValues.supplierID,
+    req.user._id
   );
 
   res.status(200).json(updatedProduct);
@@ -94,9 +115,17 @@ exports.searchProduct = async (req, res) => {
 
   const products = userProducts.productsID.filter(
     (product) =>
-      regSearch.test(product.name) &&
+      regSearch.test(product.name.toLowerCase()) &&
       (hasQuantity ? product.quantity > 0 : true)
   );
 
   res.status(200).json(products);
+};
+
+exports.getProductsAvailable = async (req, res) => {
+  const { productsID } = await UserModel.findById(req.user._id).populate(
+    "productsID"
+  );
+  const productsAvailable = productsID.filter((e) => e.quantity);
+  res.status(200).json(productsAvailable);
 };
